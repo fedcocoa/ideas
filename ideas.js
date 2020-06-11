@@ -1,50 +1,61 @@
-let items = {
-    0:{
-        fields: {
-            0: {
+let items = [
+    {
+        fields: [
+            {
                 type: 'h1',
                 value: 'test'
             },
-            1: {
+            {
                 type: 'ul'
             },
-            2: {
+            {
                 type: 'li',
                 value: 'Eggs'
             },
-            3: {
+            {
                 type: 'li',
                 value: 'Eggs'
             },
-            4: {
+            {
                 type: 'li',
                 value: 'Eggs'
             }
-        },
+        ],
         style: {
-
+            width: '200px',
+            height: '200px'
         }
     }
-};
+];
 
 function loaded() {
-    items = getItems();
-    items[0].style.left = '0px';
-    items[0].style.top = '0px';
-    items[0].addEventListener('mousemove',function(event) {
-        if(event.buttons == 1) {
-            items[0].style.left = String(event.clientX - items[0].clientWidth/2) + 'px';
-            items[0].style.top = String(event.clientY - items[0].clientHeight/2) + 'px';
-        }
-    });
+    let canvas = document.getElementById('canvas');
+    for(let i = 0; i < items.length; i++) {
+        createItem(items[i]);
+    }
 }
 
-function parseOffset(str) {
-    return parseInt(str.replace('px',''));
+function createItem(item) {
+    console.log(item);
+    let rootNode = canvas.appendChild(document.createElement('div'));
+    rootNode.classList.add('item');
+    setSize(rootNode,item.style.width,item.style.height);
+    for(let i = 0; i < item.fields.length; i++) {
+        rootNode.appendChild(createNode(item.fields[i]));
+    }
 }
 
-function getItems() {
-    return document.getElementsByClassName('item');
+function createNode(field) {
+    let fieldRoot = document.createElement(field.type);
+    if(field.value != null) {
+        fieldRoot.appendChild(document.createTextNode(field.value));
+    }
+    return fieldRoot;
+}
+
+function setSize(node,width,height) {
+    node.style.width = width;
+    node.style.height = height;
 }
 
 function mousedown(item) {

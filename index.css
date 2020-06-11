@@ -8,4 +8,5 @@ html {
     margin: 5px;
     padding-top: 10px;
     position: fixed;
+    overflow: scroll;
 }
