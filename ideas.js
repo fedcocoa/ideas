@@ -6,19 +6,23 @@ let items = [
                 value: 'test'
             },
             {
-                type: 'ul'
+                type: 'ol',
+                children: [{
+                    type: 'li',
+                    value: 'Eggs'
+                },
+                {
+                    type: 'li',
+                    value: 'Eggs'
+                },
+                {
+                    type: 'li',
+                    value: 'Eggs'
+                }]
             },
             {
-                type: 'li',
-                value: 'Eggs'
-            },
-            {
-                type: 'li',
-                value: 'Eggs'
-            },
-            {
-                type: 'li',
-                value: 'Eggs'
+                type: 'p',
+                value: 'subtitle'
             }
         ],
         style: {
@@ -37,20 +41,24 @@ function loaded() {
 
 function createItem(item) {
     console.log(item);
-    let rootNode = canvas.appendChild(document.createElement('div'));
-    rootNode.classList.add('item');
-    setSize(rootNode,item.style.width,item.style.height);
+    let itemNode = canvas.appendChild(document.createElement('div'));
+    itemNode.classList.add('item');
+    setSize(itemNode,item.style.width,item.style.height);
     for(let i = 0; i < item.fields.length; i++) {
-        rootNode.appendChild(createNode(item.fields[i]));
+        createNode(itemNode,item.fields[i]);
     }
 }
 
-function createNode(field) {
-    let fieldRoot = document.createElement(field.type);
+function createNode(parent,field) {
+    let fieldRoot = parent.appendChild(document.createElement(field.type));
     if(field.value != null) {
         fieldRoot.appendChild(document.createTextNode(field.value));
     }
-    return fieldRoot;
+    if(field.children != null) {
+        for(let i = 0; i < field.children.length; i++) {
+            createNode(fieldRoot,field.children[i]);
+        }
+    }
 }
 
 function setSize(node,width,height) {
